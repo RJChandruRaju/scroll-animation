@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManageEngine User Academy — Badge Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #060810;
+  --orange: #F4622A;
+  --amber: #FF9A3C;
+  --white: #FFFFFF;
+  --muted: rgba(255,255,255,0.38);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Noise grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.5;
+}
+
+/* ── HERO ── */
+.hero {
+  height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(244,98,42,0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 20% 20%, rgba(244,98,42,0.04) 0%, transparent 60%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(244,98,42,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,98,42,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 10%, transparent 75%);
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 0.8rem;
+  font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 2rem;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; width: 32px; height: 1px;
+  background: var(--orange); opacity: 0.45;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 9vw, 8rem);
+  line-height: 0.92; letter-spacing: 0.015em;
+  margin-bottom: 1.8rem;
+}
+.hero h1 .accent { color: var(--orange); display: block; }
+.hero-sub {
+  font-size: 1.05rem; font-weight: 300;
+  color: var(--muted); max-width: 480px;
+  line-height: 1.85; margin-bottom: 4rem;
+}
+.scroll-indicator {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.5rem;
+  color: rgba(255,255,255,0.2);
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+}
+.scroll-bar {
+  width: 1px; height: 56px;
+  background: linear-gradient(to bottom, var(--orange), transparent);
+  animation: barPulse 2.2s ease-in-out infinite;
+}
+@keyframes barPulse {
+  0%,100% { opacity: 0.3; transform: scaleY(0.8); }
+  50%      { opacity: 1;   transform: scaleY(1.1); }
+}
+.bracket { position: absolute; width: 48px; height: 48px; }
+.bracket.tl { top: 28px; left: 28px; border-top: 1px solid rgba(244,98,42,0.28); border-left: 1px solid rgba(244,98,42,0.28); }
+.bracket.tr { top: 28px; right: 28px; border-top: 1px solid rgba(244,98,42,0.28); border-right: 1px solid rgba(244,98,42,0.28); }
+.bracket.bl { bottom: 28px; left: 28px; border-bottom: 1px solid rgba(244,98,42,0.28); border-left: 1px solid rgba(244,98,42,0.28); }
+.bracket.br { bottom: 28px; right: 28px; border-bottom: 1px solid rgba(244,98,42,0.28); border-right: 1px solid rgba(244,98,42,0.28); }
+
+/* ── SCROLL SECTION ── */
+.scroll-section {
+  position: relative;
+  /* 79 frames × ~60px scroll per frame = nice smooth feel */
+  height: 600vh;
+}
+
+.sticky {
+  position: sticky; top: 0; height: 100vh;
+  overflow: hidden; display: flex;
+  align-items: center; justify-content: center;
+  background: var(--bg);
+}
+
+/* Vignette overlay */
+.sticky::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, rgba(6,8,16,0.7) 100%);
+  pointer-events: none; z-index: 3;
+}
+
+/* Ambient glow that reacts to scroll */
+.ambient {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 0;
+}
+
+/* Faint grid */
+.sticky-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(244,98,42,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,98,42,0.02) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 10%, transparent 70%);
+  z-index: 0;
+}
+
+/* ── FRAME IMAGE ── */
+.frame-container {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+#animFrame {
+  max-width: 90vw;
+  max-height: 82vh;
+  object-fit: contain;
+  display: block;
+  /* Crisp frame swaps — no CSS transitions */
+  image-rendering: auto;
+}
+
+/* Floor glow beneath animation */
+.frame-glow {
+  position: absolute;
+  bottom: 8%; left: 50%;
+  transform: translateX(-50%);
+  width: 500px; height: 60px;
+  background: radial-gradient(ellipse, rgba(244,98,42,0.5) 0%, transparent 70%);
+  filter: blur(30px); border-radius: 50%;
+  z-index: 1; pointer-events: none;
+  transition: background 0.4s;
+}
+
+/* ── PHASE LABEL ── */
+.phase-ui {
+  position: absolute; top: 9%; left: 50%;
+  transform: translateX(-50%);
+  text-align: center; z-index: 10;
+  pointer-events: none;
+}
+.phase-step {
+  font-size: 0.62rem; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 0.4rem;
+  transition: opacity 0.35s;
+}
+.phase-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  letter-spacing: 0.06em; color: rgba(255,255,255,0.9);
+  transition: opacity 0.35s;
+}
+
+/* ── BOTTOM UI ── */
+.bottom-ui {
+  position: absolute; bottom: 6%; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.8rem;
+  z-index: 10; width: min(380px, 82vw);
+}
+.prog-track {
+  width: 100%; height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+.prog-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--orange), var(--amber));
+  box-shadow: 0 0 8px rgba(244,98,42,0.6);
+  transition: width 0.05s linear;
+}
+.prog-label {
+  font-size: 0.6rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(255,255,255,0.22);
+}
+
+/* Frame counter — subtle top right */
+.frame-counter {
+  position: absolute; top: 9%; right: 5%;
+  font-size: 0.55rem; letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.15); z-index: 10;
+  font-family: 'Outfit', monospace;
+}
+
+/* ── OUTRO ── */
+.outro {
+  height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
+  position: relative; overflow: hidden;
+}
+.outro-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 55% at 50% 50%, rgba(244,98,42,0.1) 0%, transparent 70%);
+}
+.outro h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  letter-spacing: 0.02em; margin-bottom: 1.2rem; position: relative;
+}
+.outro h2 span { color: var(--orange); }
+.outro p {
+  color: var(--muted); font-size: 1rem; font-weight: 300;
+  max-width: 440px; line-height: 1.85;
+  margin-bottom: 3rem; position: relative;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  background: var(--orange); color: #fff;
+  font-family: 'Outfit', sans-serif; font-weight: 700;
+  font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 1.1rem 2.8rem; border-radius: 100px;
+  text-decoration: none; position: relative;
+  box-shadow: 0 0 50px rgba(244,98,42,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 70px rgba(244,98,42,0.55);
+}
+.outro .bracket.tl { top: 28px; left: 28px; border-top: 1px solid rgba(244,98,42,0.2); border-left: 1px solid rgba(244,98,42,0.2); }
+.outro .bracket.tr { top: 28px; right: 28px; border-top: 1px solid rgba(244,98,42,0.2); border-right: 1px solid rgba(244,98,42,0.2); }
+.outro .bracket.bl { bottom: 28px; left: 28px; border-bottom: 1px solid rgba(244,98,42,0.2); border-left: 1px solid rgba(244,98,42,0.2); }
+.outro .bracket.br { bottom: 28px; right: 28px; border-bottom: 1px solid rgba(244,98,42,0.2); border-right: 1px solid rgba(244,98,42,0.2); }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="bracket tl"></div><div class="bracket tr"></div>
+  <div class="bracket bl"></div><div class="bracket br"></div>
+  <div class="hero-eyebrow">ManageEngine User Academy</div>
+  <h1>Earn Skills.<br><span class="accent">Unlock Mastery.</span></h1>
+  <p class="hero-sub">Collect skill badges across IAM and SIEM. Stack them into a bundle. Earn your Expert credential.</p>
+  <div class="scroll-indicator">
+    <div class="scroll-bar"></div>
+    <span>Scroll to explore</span>
+  </div>
+</section>
+
+<!-- ══ SCROLL ANIMATION ══ -->
+<section class="scroll-section" id="journey">
+  <div class="sticky" id="sticky">
+
+    <div class="ambient" id="ambient"></div>
+    <div class="sticky-grid"></div>
+
+    <!-- Phase label -->
+    <div class="phase-ui">
+      <p class="phase-step" id="phaseStep">Step 01</p>
+      <h2 class="phase-title" id="phaseTitle">Earn your skill badge</h2>
+    </div>
+
+    <!-- Frame counter -->
+    <div class="frame-counter" id="frameCounter">01 / 79</div>
+
+    <!-- THE ANIMATION -->
+    <div class="frame-container">
+      <div class="frame-glow" id="frameGlow"></div>
+      <img id="animFrame" src="frames/ezgif-frame-001.jpg" alt="Badge Animation"/>
+    </div>
+
+    <!-- Bottom progress -->
+    <div class="bottom-ui">
+      <div class="prog-track">
+        <div class="prog-fill" id="progFill"></div>
+      </div>
+      <p class="prog-label" id="progLabel">Scroll to begin your journey</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ OUTRO ══ -->
+<section class="outro">
+  <div class="outro-bg"></div>
+  <div class="bracket tl"></div><div class="bracket tr"></div>
+  <div class="bracket bl"></div><div class="bracket br"></div>
+  <h2>You're <span>Certified.</span></h2>
+  <p>You've stacked your skills and earned the Expert bundle. Your ManageEngine expertise is now verified and shareable.</p>
+  <a href="https://useracademy.manageengine.com/all-courses" class="cta-btn">Start Your Journey →</a>
+</section>
+
+<script>
+const TOTAL_FRAMES = 79;
+const FRAME_PREFIX = 'frames/ezgif-frame-';
+const FRAME_EXT    = '.jpg';
+
+// ── Preload all frames upfront for smooth scrubbing
+const frameCache = [];
+for (let i = 1; i <= TOTAL_FRAMES; i++) {
+  const img = new Image();
+  const num = String(i).padStart(3, '0');
+  img.src = `${FRAME_PREFIX}${num}${FRAME_EXT}`;
+  frameCache.push(img);
+}
+
+// ── Elements
+const section      = document.getElementById('journey');
+const animFrame    = document.getElementById('animFrame');
+const ambient      = document.getElementById('ambient');
+const progFill     = document.getElementById('progFill');
+const progLabel    = document.getElementById('progLabel');
+const phaseStep    = document.getElementById('phaseStep');
+const phaseTitle   = document.getElementById('phaseTitle');
+const frameCounter = document.getElementById('frameCounter');
+const frameGlow    = document.getElementById('frameGlow');
+
+let currentFrame = 0;
+
+// Phase definitions based on frame ranges
+// Adjust these ranges to match your actual animation content
+const phases = [
+  { from: 0,  to: 20, step: 'Step 01', title: 'Earn your skill badge',     glow: 'rgba(244,98,42,0.5)' },
+  { from: 20, to: 50, step: 'Step 02', title: 'Stack your expertise',      glow: 'rgba(244,98,42,0.7)' },
+  { from: 50, to: 79, step: 'Unlocked', title: 'Expert Bundle Achieved',   glow: 'rgba(255,165,40,0.6)' },
+];
+
+function getPhase(frame) {
+  return phases.find(p => frame >= p.from && frame < p.to) || phases[phases.length - 1];
+}
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+function onScroll() {
+  const rect  = section.getBoundingClientRect();
+  const total = section.offsetHeight - window.innerHeight;
+  const raw   = clamp(-rect.top / total, 0, 1);
+
+  // Frame index 0–78
+  const frameIdx = Math.round(raw * (TOTAL_FRAMES - 1));
+
+  // Only update DOM if frame changed
+  if (frameIdx !== currentFrame) {
+    currentFrame = frameIdx;
+    const num = String(frameIdx + 1).padStart(3, '0');
+    animFrame.src = `${FRAME_PREFIX}${num}${FRAME_EXT}`;
+    frameCounter.textContent = `${String(frameIdx + 1).padStart(2,'0')} / ${TOTAL_FRAMES}`;
+  }
+
+  // Progress bar
+  progFill.style.width = `${raw * 100}%`;
+
+  // Phase label
+  const phase = getPhase(frameIdx);
+  phaseStep.textContent  = phase.step;
+  phaseTitle.textContent = phase.title;
+
+  // Progress label
+  if (raw < 0.02) {
+    progLabel.textContent = 'Scroll to begin your journey';
+  } else if (raw < 0.98) {
+    const pct = Math.round(raw * 100);
+    progLabel.textContent = `${pct}% complete`;
+  } else {
+    progLabel.textContent = 'Expert badge unlocked 🎉';
+  }
+
+  // Ambient glow reacts to phase
+  const t = raw;
+  if (frameIdx < 50) {
+    const intensity = 0.08 + raw * 0.12;
+    ambient.style.background = `radial-gradient(ellipse 65% 60% at 50% 55%, rgba(244,98,42,${intensity}) 0%, transparent 65%)`;
+    frameGlow.style.background = `radial-gradient(ellipse, rgba(244,98,42,0.5) 0%, transparent 70%)`;
+  } else {
+    const gt = clamp((frameIdx - 50) / 29, 0, 1);
+    const r  = Math.round(244 + (255-244)*gt);
+    const g  = Math.round(98  + (165-98)*gt);
+    const b  = Math.round(42  + (40-42)*gt);
+    ambient.style.background = `radial-gradient(ellipse 60% 55% at 50% 52%, rgba(${r},${g},${b},0.20) 0%, transparent 62%)`;
+    frameGlow.style.background = `radial-gradient(ellipse, rgba(${r},${g},${b},0.55) 0%, transparent 70%)`;
+  }
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('resize', onScroll);
+onScroll();
+</script>
+</body>
+</html>
